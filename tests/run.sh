@@ -77,6 +77,11 @@ printf '[Service]\nExecStart=/x\nUser=svc\nNoNewPrivileges=no\nCapabilityBoundin
 assert "NoNewPrivileges=no flagged HIGH" "NoNewPrivileges=no" -- $UC "$T/danger.service" --no-color
 assert "dangerous cap flagged"    "dangerous capability: CAP_SYS_ADMIN" -- $UC "$T/danger.service" --no-color
 
+echo "== dynamic user model =="
+sed '/User=myapp/c\DynamicUser=yes' "$T/hard.service" > "$T/dynamic.service"
+refute "DynamicUser is not reported as root" "runs as root" -- $UC "$T/dynamic.service" --no-color
+assert_exit "hardened DynamicUser unit passes" 0 -- $UC "$T/dynamic.service" --no-color
+
 echo "== --min-score gate =="
 # hardened unit but with a strict threshold that it still clears
 assert_exit "hardened clears min-score 90" 0 -- $UC "$T/hard.service" --min-score 90 --no-color
