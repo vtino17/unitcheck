@@ -99,9 +99,10 @@ def audit_unit(text: str) -> tuple[list[Finding], int]:
 
     # runs as root?
     users = d.get("User")
-    if not users:
+    dynamic_users = d.get("DynamicUser")
+    if not users and not (dynamic_users and _yes(dynamic_users[-1])):
         out.append(Finding("HIGH", "no User= set: the service runs as root"))
-    elif users[-1].strip() in ("root", "0"):
+    elif users and users[-1].strip() in ("root", "0"):
         out.append(Finding("HIGH", "User=root: the service runs as root"))
 
     # explicitly dangerous capabilities kept or granted
