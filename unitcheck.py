@@ -50,7 +50,7 @@ CHECKS = [
      "non-native syscall ABIs are allowed"),
     ("RestrictAddressFamilies", lambda v: bool(v.strip()), "MEDIUM", 2,
      "all socket address families are allowed"),
-    ("CapabilityBoundingSet", lambda v: True, "MEDIUM", 2,
+    ("CapabilityBoundingSet", lambda v: bool(v.strip()), "MEDIUM", 2,
      "no CapabilityBoundingSet: the service keeps all Linux capabilities"),
 ]
 
